@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: nieqi-ai-code-father-backed
+  autoconfigure:
+    exclude:
+      - dev.langchain4j.community.store.embedding.redis.spring.RedisEmbeddingStoreAutoConfiguration
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/nieqi_ai_code_father?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
+  profiles:
+    active: local
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+      username: default
+      password: ${REDIS_PASSWORD:}
+      ttl: 3600
+      database: 3
+
+# springdoc-openapi
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: com.nieqi.nieqicodefather.controller
+
+# server 配置
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+# 代码生成与部署路径配置（宝塔生产环境请在 application-prod.yml 中覆盖）
+app:
+  code-output-dir: ${user.dir}/tmp/code_output
+  code-deploy-dir: ${user.dir}/tmp/code_deploy
+
+# 代码预览 & 部署配置
+code:
+  screenshot-base-url: http://localhost:8123/api
+  deploy-host: http://localhost:8123
+
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+# 用户配置
+user:
+  default-password: ${USER_DEFAULT_PASSWORD:12345678}
+
+langchain4j:
+  open-ai:
+    streaming-chat-model:
+      base-url: https://api.deepseek.com
+      api-key: ${DEEPSEEK_API_KEY:}
+      model-name: deepseek-v4-flash
+      max-tokens: 8192
+      log-requests: true
+      log-responses: true
